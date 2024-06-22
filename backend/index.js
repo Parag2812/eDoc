@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const User = require ('./models/User');
+
 
 const app = express();
 const PORT = 5000;
@@ -18,7 +20,12 @@ mongoose.connect('mongodb+srv://imparag2812:qwerty123@cluster0.utjbg9s.mongodb.n
     console.error('Failed to connect to MongoDB', err);
   });
 
+//   app.post("/login", async (req, res)=>{
+//     let user =  new User(req.body);
+//     let result = await user.save();
+//     res.send(result);
 
+//   })
   //ROUTES
 
   const userRoutes = require('./routes/user');

@@ -17,7 +17,7 @@ function Home() {
     <div className="App">
       <header className="App-header">
         <nav className="navbar">
-          <div className="logo">eDoc. | SEAMLESS HEALTHCARE ACCESSs</div>
+          <div className="logo">eDoc. | SEAMLESS HEALTHCARE ACCESS</div>
           <div className="auth-links">
             <a href="/login">Login</a>
             <a href="/register">Register</a>
