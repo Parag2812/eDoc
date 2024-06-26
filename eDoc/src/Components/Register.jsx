@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css';
-import './Login.css'; // Updated import path
+import './Login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
+  const navigate = useNavigate();
+
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [address, setAddress] = useState(''); // Added state for address
-  const [age, setAge] = useState(''); // Added state for age
+  const [address, setAddress] = useState('');
+  const [age, setAge] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -16,6 +20,7 @@ function Register() {
 
     try {
       await axios.post('http://localhost:5000/api/users/register', {
+        name,
         email,
         password,
         address,
@@ -23,12 +28,24 @@ function Register() {
       });
       setSuccess('Registration Successful!');
       setError('');
+
+      // Store the email in local storage
+      localStorage.setItem('registeredEmail', email);
+
+
+      // Navigate to /login after 2 seconds
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
+
+
     } catch (err) {
       setError(err.response?.data?.message || 'User registration failed');
       setSuccess('');
     }
   };
-  
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -37,6 +54,14 @@ function Register() {
         {error && <p className="error">{error}</p>}
         {success && <p className="success">{success}</p>}
         <form onSubmit={handleRegister}>
+          <label>Name:</label>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <label>Email:</label>
           <input
             type="text"

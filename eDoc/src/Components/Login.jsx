@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Login.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [code, setCode] = useState(''); // Add state for code
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // useNavigate hook
+
+  useEffect(() => {
+
+    // Retrieve the email from local storage
+    const registeredEmail = localStorage.getItem('registeredEmail');
+    if (registeredEmail) {
+      setEmail(registeredEmail);
+      // Clear the email from local storage
+      localStorage.removeItem('registeredEmail')
+    }
+
+  })
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,12 +31,18 @@ function Login() {
       const res = await axios.post('http://localhost:5000/api/users/login', {
         email,
         password,
-        // code, // Include code in the request body
       });
-      console.log('LOGIN SUCCESSFUL:', res.data);
+      console.log('LOGIN SUCCESSFUL:', res.data); // Verify response data
+
+      const { token, name } = res.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('name', name); // Store the user's name in local storage
+
+      navigate('/dashboard'); // Redirect to dashboard
     } catch (err) {
-      setError('INVALID email, password, or code'); // Update error message
+      setError('INVALID email or password');
     }
+
   };
 
   return (

@@ -17,12 +17,19 @@ const jwt = require('jsonwebtoken');
 
 // Registration
 exports.registerUser = async (req, res) => {
-    const { email, password, age, address } = req.body;
+    const { name, email, password, age, address } = req.body;
     try {
+        // Check if the email is already in use
+        const existingUser = await User.findOne({email});
+        if (existingUser){
+            return res.status(400).json({message : "Email id is already in use"});
+        }
+
+
       // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      const user = new User({ email, password: hashedPassword, age, address });
+      const user = new User({ name ,email, password: hashedPassword, age, address });
       await user.save();
       res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -45,7 +52,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-    res.status(200).json({ token });
+    res.status(200).json({ token , name: user.name});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

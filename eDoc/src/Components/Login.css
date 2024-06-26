@@ -72,3 +72,15 @@
     text-decoration: underline;
   }
   
+  /* Register.css */
+
+/* Register.css */
+
+.message {
+  font-size: 14px; /* Adjust font size as needed */
+  margin-top: 5px; /* Optional: Add some space above the message */
+}
+
+.message.error {
+  color: red;
+}
